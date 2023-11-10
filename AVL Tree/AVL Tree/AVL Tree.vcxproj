@@ -127,7 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AVL Tree.cpp" />
+    <ClCompile Include="avltree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="avltree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

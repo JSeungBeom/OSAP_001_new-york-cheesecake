@@ -1,25 +1,51 @@
-#define INHA_OSAP_001_new-york-cheesecake_AVLTree_Avltree_H_
-#include<iostream>
-#include<vector>
+#ifndef AVLTREE_AVLTREE_AVLTREE_H_
+#define AVLTREE_AVLTREE_AVLTREE_H_
+
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-struct node {
+struct Node
+{
 	int data;
-	node* parent;
-	node* left_child;
-	node* right_child;
-	node(int data, node* parent) :
-		data(data),
-		parent(parent),
-		left_child(NULL),
-		right_child(NULL) {}
+	Node *parent;
+	Node *left_child;
+	Node *right_child;
+	Node(int data, Node *parent) : data(data),
+								   parent(parent),
+								   left_child(NULL),
+								   right_child(NULL) {}
 };
 
-class Avltree {
+class AvlTree
+{
 public:
-	Avltree() {
-		root = new node(1, NULL);
+	AvlTree()
+	{
+		root_ = new Node(1, NULL);
 	}
+
+	int Minimum();
+
+	int Maximum();
+
+	int Size();
+
+	bool Empty();
+
+	void Insert(int data);
+
+	int Find(int data);
+
 private:
-	node* root;
+	Node *root_;
+
+	void RightRotate(Node *node);
+
+	void LeftRotate(Node *node);
+
+	void Balance(Node *node);
 };
+
+#endif
