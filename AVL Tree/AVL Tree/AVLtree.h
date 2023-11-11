@@ -6,46 +6,41 @@
 
 using namespace std;
 
-struct Node
-{
-	int data;
-	Node *parent;
-	Node *left_child;
-	Node *right_child;
-	Node(int data, Node *parent) : data(data),
-								   parent(parent),
-								   left_child(NULL),
-								   right_child(NULL) {}
+struct Node {
+  int data;
+  int height;
+  Node *parent;
+  Node *left_child;
+  Node *right_child;
+  Node(int data, Node *parent)
+      : data(data), height(0), parent(parent), left_child(NULL),
+        right_child(NULL) {}
 };
 
-class AvlTree
-{
+class AvlTree {
 public:
-	AvlTree()
-	{
-		root_ = new Node(1, NULL);
-	}
+  AvlTree();
 
-	int Minimum();
+  Node *Minimum(int data);
 
-	int Maximum();
+  Node *Maximum(int data);
 
-	int Size();
+  int Size();
 
-	bool Empty();
+  bool Empty();
 
-	void Insert(int data);
+  void Insert(int data);
 
-	int Find(int data);
+  int Find(int data);
 
 private:
-	Node *root_;
+  Node *root_;
 
-	void RightRotate(Node *node);
+  void RightRotate(Node *node);
 
-	void LeftRotate(Node *node);
+  void LeftRotate(Node *node);
 
-	void Balance(Node *node);
+  void Balance(Node *node);
 };
 
 #endif
