@@ -45,6 +45,8 @@ private:
   void LeftRotate(Node *node);
 
   void Balance(Node *node);
+
+  Node *FindNode(int data);
 };
 
 #endif

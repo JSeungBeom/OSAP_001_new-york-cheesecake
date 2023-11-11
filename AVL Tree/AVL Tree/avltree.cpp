@@ -18,6 +18,23 @@ void AvlTree::UpdateHeight(Node *node) {
     node->height = 1 + max(Height(node->left_child), Height(node->right_child));
 }
 
+// 특정 키 값을 갖는 노드를 찾는 함수
+Node *AvlTree::FindNode(int data) {
+  Node *node = root_;
+
+  while (node != NULL) {
+    if (data == node->data) {
+      return node;
+    } else if (data < node->data) {
+      node = node->left_child;
+    } else {
+      node = node->right_child;
+    }
+  }
+
+  return NULL;
+}
+
 // 노드를 중심으로, Right roation을 수행하는 함수
 void AvlTree::RightRotate(Node *node) {
   Node *left_child = node->left_child;
@@ -64,4 +81,18 @@ void AvlTree::LeftRotate(Node *node) {
 
   UpdateHeight(node);
   UpdateHeight(right_child);
+}
+
+// data 값을 갖는 노드가 root인 부분트리에서, 최댓값 노드를 반환하는 함수
+Node *AvlTree::Maximum(int data) {
+  Node *node = FindNode(data);
+
+  if (node == NULL)
+    return NULL;
+
+  while (node->right_child != NULL) {
+    node = node->right_child;
+  }
+
+  return node;
 }
