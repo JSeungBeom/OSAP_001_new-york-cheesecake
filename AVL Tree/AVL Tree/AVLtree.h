@@ -36,6 +36,10 @@ public:
 private:
   Node *root_;
 
+  int Height(Node *node);
+
+  void UpdateHeight(Node *node);
+
   void RightRotate(Node *node);
 
   void LeftRotate(Node *node);
