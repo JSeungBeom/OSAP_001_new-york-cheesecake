@@ -96,3 +96,29 @@ Node *AvlTree::Maximum(int data) {
 
   return node;
 }
+
+//data 값을 갖는 노드의 depth를 반환하고,
+//노드가 존재하지 않는다면 0을 반환하는 함수
+int AvlTree::Find(int data) {
+  if (root == NULL) return 0;
+
+  Node *node = root_;
+  int depth = 0;
+
+  while (node!=NULL) {
+    if (data == node->data) {
+      return depth;
+    }
+    else if (data < node->data) {
+      depth++;
+      node = node->left_child;
+    }
+    else {
+      depth++;
+      node = node->right_child;
+    }
+  }
+
+  return 0;
+
+}
