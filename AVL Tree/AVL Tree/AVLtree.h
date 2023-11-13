@@ -35,6 +35,7 @@ public:
 
 private:
   Node *root_;
+  int size_ = 0;
 
   int Height(Node *node);
 

@@ -97,6 +97,20 @@ Node *AvlTree::Maximum(int data) {
   return node;
 }
 
+// 트리에 저장된 원소의 수를 반환
+int AvlTree::Size() {
+  return size_;
+}
+
+// 트리가 비어있으면 1, 비어있지 않다면 0을 반환
+bool AvlTree::Empty() {
+  if (size_ > 0) {
+    return 0;
+  } else {
+    return 1;
+  }
+};
+
 //data 값을 갖는 노드의 depth를 반환하고,
 //노드가 존재하지 않는다면 0을 반환하는 함수
 int AvlTree::Find(int data) {
