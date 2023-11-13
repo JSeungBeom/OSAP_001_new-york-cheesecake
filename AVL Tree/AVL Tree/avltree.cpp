@@ -129,7 +129,7 @@ bool AvlTree::Empty() {
 //data 값을 갖는 노드의 depth를 반환하고,
 //노드가 존재하지 않는다면 0을 반환하는 함수
 int AvlTree::Find(int data) {
-  if (root == NULL) return 0;
+  if (root_ == NULL) return 0;
 
   Node *node = root_;
   int depth = 0;
