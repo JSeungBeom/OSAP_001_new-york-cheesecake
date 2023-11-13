@@ -83,6 +83,21 @@ void AvlTree::LeftRotate(Node *node) {
   UpdateHeight(right_child);
 }
 
+// data 값을 갖는 노드가 root인 부분트리에서, 최소값 노드를 반환하는 함수
+Node *AvlTree::Minimum(int data) {
+  Node *node = FindNode(data);
+
+  if (node == NULL) {
+    return NULL;
+  }
+
+  while (node->left_child != NULL) {
+    node = node->left_child;
+  }
+
+  return node;
+}
+
 // data 값을 갖는 노드가 root인 부분트리에서, 최댓값 노드를 반환하는 함수
 Node *AvlTree::Maximum(int data) {
   Node *node = FindNode(data);
