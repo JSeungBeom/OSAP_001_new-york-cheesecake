@@ -119,11 +119,7 @@ int AvlTree::Size() {
 
 // 트리가 비어있으면 1, 비어있지 않다면 0을 반환
 bool AvlTree::Empty() {
-  if (size_ > 0) {
-    return 0;
-  } else {
-    return 1;
-  }
+  return (size_ == 0);
 };
 
 //data 값을 갖는 노드의 depth를 반환하고,
