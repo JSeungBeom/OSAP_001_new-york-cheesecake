@@ -19,7 +19,7 @@ int AvlTree<T>::Height(Node<T> *node)
 template <typename T>
 void AvlTree<T>::UpdateHeight(Node<T> *node)
 {
-  if (node != nullptr)
+  if (node != NULL)
     node->height = 1 + max(Height(node->left_child), Height(node->right_child));
 }
 
@@ -81,12 +81,12 @@ void AvlTree<T>::LeftRotate(Node<T> *node)
   Node<T> *right_child = node->right_child;
   node->right_child = right_child->left_child;
 
-  if (right_child->left_child != nullptr)
+  if (right_child->left_child != NULL)
     right_child->left_child->parent = node;
 
   right_child->parent = node->parent;
 
-  if (node->parent == nullptr)
+  if (node->parent == NULL)
     root_ = right_child;
   else if (node == node->parent->left_child)
     node->parent->left_child = right_child;
@@ -106,12 +106,12 @@ Node<T> *AvlTree<T>::Minimum(T data)
 {
   Node<T> *node = FindNode(data);
 
-  if (node == nullptr)
+  if (node == NULL)
   {
-    return nullptr;
+    return NULL;
   }
 
-  while (node->left_child != nullptr)
+  while (node->left_child != NULL)
   {
     node = node->left_child;
   }
@@ -124,10 +124,10 @@ Node<T> *AvlTree<T>::Maximum(T data)
 {
   Node<T> *node = FindNode(data);
 
-  if (node == nullptr)
-    return nullptr;
+  if (node == NULL)
+    return NULL;
 
-  while (node->right_child != nullptr)
+  while (node->right_child != NULL)
   {
     node = node->right_child;
   }
@@ -154,13 +154,13 @@ bool AvlTree<T>::Empty()
 template <typename T>
 int AvlTree<T>::Find(T data)
 {
-  if (root_ == nullptr)
+  if (root_ == NULL)
     return 0;
 
   Node<T> *node = root_;
   int depth = 0;
 
-  while (node != nullptr)
+  while (node != NULL)
   {
     if (data == node->data)
     {
