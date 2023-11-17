@@ -13,8 +13,8 @@ struct Node
   Node *left_child;
   Node *right_child;
   Node(T data, Node *parent)
-      : data(data), height(0), parent(parent), left_child(NULL),
-        right_child(NULL) {}
+      : data(data), height(0), parent(parent), left_child(nullptr),
+        right_child(nullptr) {}
 };
 
 template <typename T>
