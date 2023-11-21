@@ -4,50 +4,52 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
-struct Node {
-  int data;
+template <typename T>
+struct Node
+{
+  T data;
   int height;
   Node *parent;
   Node *left_child;
   Node *right_child;
-  Node(int data, Node *parent)
-      : data(data), height(0), parent(parent), left_child(NULL),
-        right_child(NULL) {}
+  Node(T data, Node *parent)
+      : data(data), height(0), parent(parent), left_child(nullptr),
+        right_child(nullptr) {}
 };
 
-class AvlTree {
+template <typename T>
+class AvlTree
+{
 public:
   AvlTree();
 
-  Node *Minimum(int data);
+  Node<T> *Minimum(T data);
 
-  Node *Maximum(int data);
+  Node<T> *Maximum(T data);
 
   int Size();
 
   bool Empty();
 
-  void Insert(int data);
+  void Insert(T data);
 
-  int Find(int data);
+  int Find(T data);
 
 private:
   Node *root_;
   int size_ = 0;
 
-  int Height(Node *node);
+  int Height(Node<T> *node);
 
-  void UpdateHeight(Node *node);
+  void UpdateHeight(Node<T> *node);
 
-  void RightRotate(Node *node);
+  void RightRotate(Node<T> *node);
 
-  void LeftRotate(Node *node);
+  void LeftRotate(Node<T> *node);
 
-  void Balance(Node *node);
+  void Balance(Node<T> *node);
 
-  Node *FindNode(int data);
+  Node<T> *FindNode(T data);
 };
 
 #endif
