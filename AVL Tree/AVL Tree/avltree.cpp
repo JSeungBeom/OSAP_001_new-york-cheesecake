@@ -3,32 +3,6 @@
 #include <vector>
 
 template <typename T>
-class Set
-{
-public:
-  virtual Node<T> *Minimum(T data) = 0;
-
-  virtual Node<T> *Maximum(T data) = 0;
-
-  // 트리에 저장된 원소의 수를 반환
-  virtual int Size()
-  {
-    return size_;
-  }
-
-  // 트리가 비어있으면 1, 비어있지 않다면 0을 반환
-  virtual bool Empty()
-  {
-    return (size_ == 0);
-  }
-
-  virtual void Insert(T data) = 0;
-
-protected:
-  int size_;
-};
-
-template <typename T>
 struct Node
 {
   T data;
@@ -41,8 +15,34 @@ struct Node
         right_child(nullptr) {}
 };
 
+// template <typename T>
+// class Set
+// {
+// public:
+//   virtual Node<T> *Minimum(T data) = 0;
+
+//   virtual Node<T> *Maximum(T data) = 0;
+
+//   // 트리에 저장된 원소의 수를 반환
+//   virtual int Size()
+//   {
+//     return size_;
+//   }
+
+//   // 트리가 비어있으면 1, 비어있지 않다면 0을 반환
+//   virtual bool Empty()
+//   {
+//     return (size_ == 0);
+//   }
+
+//   virtual void Insert(T data) = 0;
+
+// protected:
+//   int size_;
+// };
+
 template <typename T>
-class AvlTree : public Set<T>
+class AvlTree
 {
 public:
   // 생성자
@@ -133,6 +133,7 @@ public:
 
 private:
   Node<T> *root_;
+  int size_;
 
   // 노드의 높이 구하는 함수
   int Height(Node<T> *node)
