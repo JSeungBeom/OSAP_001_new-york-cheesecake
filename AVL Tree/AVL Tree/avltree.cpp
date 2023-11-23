@@ -52,7 +52,7 @@ Node<T> *AvlTree<T>::FindNode(T data)
 template <typename T>
 void AvlTree<T>::RightRotate(Node<T> *node)
 {
-  Node *left_child = node->left_child;
+  Node<T> *left_child = node->left_child;
   node->left_child = left_child->right_child;
 
   if (left_child->right_child != nullptr)

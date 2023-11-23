@@ -36,8 +36,8 @@ public:
   int Find(T data);
 
 private:
-  Node *root_;
-  int size_ = 0;
+  Node<T> *root_;
+  int size_;
 
   int Height(Node<T> *node);
 
