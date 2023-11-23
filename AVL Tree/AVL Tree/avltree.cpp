@@ -133,7 +133,6 @@ public:
 
 private:
   Node<T> *root_;
-  int size_;
 
   // 노드의 높이 구하는 함수
   int Height(Node<T> *node)
