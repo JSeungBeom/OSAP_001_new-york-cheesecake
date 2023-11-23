@@ -4,7 +4,7 @@ using namespace std;
 
 // 생성자
 template <typename T>
-AvlTree<T>::AvlTree() { root_ = nullptr; }
+AvlTree<T>::AvlTree() { root_ = nullptr; size_ = 0; }
 
 // 노드의 높이 구하는 함수
 template <typename T>
