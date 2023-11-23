@@ -4,7 +4,7 @@ using namespace std;
 
 // 생성자
 template <typename T>
-AvlTree<T>::AvlTree() { root_ = nullptr; }
+AvlTree<T>::AvlTree() { root_ = nullptr; size_ = 0; }
 
 // 노드의 높이 구하는 함수
 template <typename T>
@@ -52,7 +52,7 @@ Node<T> *AvlTree<T>::FindNode(T data)
 template <typename T>
 void AvlTree<T>::RightRotate(Node<T> *node)
 {
-  Node *left_child = node->left_child;
+  Node<T> *left_child = node->left_child;
   node->left_child = left_child->right_child;
 
   if (left_child->right_child != nullptr)
