@@ -10,9 +10,6 @@
 1. Build executable files
 
 ```sh
-# 작업할 위치로 이동
-cd AVL\ Tree/AVL\ Tree
-
 # 빌드 경로 생성 및 이동(이미 있다면 삭제 후 생성 권장)
 mkdir build
 cd build
