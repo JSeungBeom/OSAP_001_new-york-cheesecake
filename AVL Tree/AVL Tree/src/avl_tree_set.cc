@@ -96,94 +96,95 @@ private:
   class AVLTreeNode : public Node<T> {
   public:
     AVLTreeNode(T key)
-        : Node<T>(key), height_(0), left_(nullptr), right_(nullptr) {}
-
-    void set_height(int height) { height_ = height; }
-    int get_height() { return height_; }
-    void set_left(AVLTreeNode *left) { left_ = left; }
-    AVLTreeNode *get_left() { return left_; }
-    void set_right(AVLTreeNode *right) { right_ = right; }
-    AVLTreeNode *get_right() { return right_; }
+        : Node<T>(key), height_(0), left_(nullptr), right_(nullptr), parent_(nullptr) {}
 
   private:
     int height_;
     AVLTreeNode *left_;
     AVLTreeNode *right_;
+    AVLTreeNode* parent_;
   };
 
-  // int Height(Node<T> *node){
-  //     if (node == nullptr)
-  //       return -1;
-  //     return node->height;
-  // };
-  // void UpdateHeight(Node<T> *node){
-  //     if (node != nullptr)
-  //       node->height =
-  //           1 + max(Height(node->left_child), Height(node->right_child));
-  // };
-  // void RightRotate(Node<T> *node){
-  //     Node<T> *left_child = node->left_child;
-  //     node->left_child = left_child->right_child;
+  // 노드의 깊이를 구하는 함수
+  int Height(AVLTreeNode *node){
+      if (node == nullptr)
+        return -1;
+      return node->height_;
+  };
 
-  //     if (left_child->right_child != nullptr)
-  //       left_child->right_child->parent = node;
+  // 노드의 깊이를 업데이트하는 함수
+  void UpdateHeight(AVLTreeNode *node){
+      if (node != nullptr)
+        node->height_ =
+            1 + max(Height(node->left_), Height(node->right_));
+  };
 
-  //     left_child->parent = node->parent;
+  // Right Roatation을 수행하는 함수
+  void RightRotate(AVLTreeNode *node){
+      AVLTreeNode *left_child = node->left_;
+      node->left_ = left_child->right_;
 
-  //     if (node->parent == nullptr)
-  //       root_ = left_child;
-  //     else if (node == node->parent->left_child)
-  //       node->parent->left_child = left_child;
-  //     else
-  //       node->parent->right_child = left_child;
+      if (left_child->right_child != nullptr)
+        left_child->right_->parent_ = node;
 
-  //     left_child->right_child = node;
-  //     node->parent = left_child;
+      left_child->parent_ = node->parent_;
 
-  //     UpdateHeight(node);
-  //     UpdateHeight(left_child);
-  // };
-  // void LeftRotate(Node<T> *node){
-  //     Node<T> *right_child = node->right_child;
-  //     node->right_child = right_child->left_child;
+      if (node->parent_ == nullptr)
+        root_ = left_child;
+      else if (node == node->parent_->left_)
+        node->parent_->left_ = left_child;
+      else
+        node->parent_->right_ = left_child;
 
-  //     if (right_child->left_child != nullptr)
-  //       right_child->left_child->parent = node;
+      left_child->right_ = node;
+      node->parent_ = left_child;
 
-  //     right_child->parent = node->parent;
+      UpdateHeight(node);
+      UpdateHeight(left_child);
+  };
 
-  //     if (node->parent == nullptr)
-  //       root_ = right_child;
-  //     else if (node == node->parent->left_child)
-  //       node->parent->left_child = right_child;
-  //     else
-  //       node->parent->right_child = right_child;
+  // Left Rotation을 실행하는 함수
+  void LeftRotate(AVLTreeNode *node){
+      AVLTreeNode *right_child = node->right_;
+      node->right_ = right_child->left_;
 
-  //     right_child->left_child = node;
-  //     node->parent = right_child;
+      if (right_child->left_ != nullptr)
+        right_child->left_->parent_ = node;
 
-  //     UpdateHeight(node);
-  //     UpdateHeight(right_child);
-  // };
+      right_child->parent_ = node->parent_;
 
-  // void Balance(Node<T> *node){};
+      if (node->parent_ == nullptr)
+        root_ = right_child;
+      else if (node == node->parent_->left_)
+        node->parent_->left_ = right_child;
+      else
+        node->parent_->right_ = right_child;
 
-  // // 특정 키 값을 갖는 노드를 찾는 함수
-  // Node<T> *FindNode(T data){
-  //     Node<T> *node = root_;
+      right_child->left_ = node;
+      node->parent_ = right_child;
 
-  //     while (node != nullptr) {
-  //       if (data == node->data) {
-  //         return node;
-  //       } else if (data < node->data) {
-  //         node = node->left_child;
-  //       } else {
-  //         node = node->right_child;
-  //       }
-  //     }
+      UpdateHeight(node);
+      UpdateHeight(right_child);
+  };
 
-  //     return nullptr;
-  // };
+  void Balance(AVLTreeNode *node){};
+
+  // 특정 키 값을 갖는 노드를 찾는 함수
+  AVLTreeNode *FindNode(T x){
+      AVLTreeNode *node = root_;
+
+      while (node != nullptr) {
+        if (x == node->key_) {
+          return node;
+        } else if (x < node->key_) {
+          node = node->left_child;
+        } else {
+          node = node->right_child;
+        }
+      }
+
+      return nullptr;
+  };
 
   AVLTreeNode *root_;
   int size_;
