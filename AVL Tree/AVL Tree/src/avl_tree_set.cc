@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <string>
 #include <vector>
 
 template <typename T> class Set {
@@ -73,18 +74,23 @@ public:
 
       // return node;
   };
+
+  // 노드 x가 루트인 부분트리에서 최대 key를갖는 노드의 key와 depth를 공백으로 구분하여 리턴
   std::string Maximum(T x){
-      // Node<T> *node = FindNode(data);
+      AVLTreeNode *node = FindNode(x);
 
-      // if (node == nullptr)
-      //   return nullptr;
+      if (node == nullptr)
+        return "Not found";
 
-      // while (node->right_child != nullptr) {
-      //   node = node->right_child;
-      // }
+      while (node->get_right() != nullptr) {
+        node = node->get_right();
+      }
 
-      // return node;
+      std::string tmp = std::to_string(node->get_height()) + " " + std::to_string(node->get_key());
+
+      return tmp;
   };
+
   std::string Rank(T x){
       //
   };
@@ -97,6 +103,22 @@ private:
   public:
     AVLTreeNode(T key)
         : Node<T>(key), height_(0), left_(nullptr), right_(nullptr), parent_(nullptr) {}
+
+    void set_height(int height) { height_ = height; }
+
+    int get_height() { return height_; }
+
+    void set_left(AVLTreeNode *left) { left_ = left; }
+
+    AVLTreeNode *get_left() { return left_; }
+
+    void set_right(AVLTreeNode *right) { right_ = right; }
+
+    AVLTreeNode *get_right() { return right_; }
+
+    void set_parent(AVLTreeNode *parent) { parent_ = parent; }
+  
+    AVLTreeNode *get_parent() { return parent_; }
 
   private:
     int height_;
@@ -174,12 +196,12 @@ private:
       AVLTreeNode *node = root_;
 
       while (node != nullptr) {
-        if (x == node->key_) {
+        if (x == node->get_key()) {
           return node;
-        } else if (x < node->key_) {
-          node = node->left_child;
+        } else if (x < node->get_key()) {
+          node = node->get_left();
         } else {
-          node = node->right_child;
+          node = node->get_right();
         }
       }
 
