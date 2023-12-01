@@ -104,6 +104,12 @@ private:
     AVLTreeNode(T key)
         : Node<T>(key), height_(0), left_(nullptr), right_(nullptr), parent_(nullptr) {}
 
+    // 후위 순회 방식으로 노드 삭제
+    ~AVLTreeNode() {
+        delete left_;
+        delete right_;
+    }
+
     void set_height(int height) { height_ = height; }
 
     int get_height() { return height_; }
