@@ -36,7 +36,8 @@ public:
   int Size() { return size_; };
 
   int Insert(T x) {
-    //
+    size_ += 1;
+    return FindDepth(x);
   };
   int Find(T x){
       // if (root_ == nullptr)
