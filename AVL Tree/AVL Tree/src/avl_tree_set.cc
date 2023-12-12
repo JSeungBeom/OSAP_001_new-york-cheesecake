@@ -31,14 +31,12 @@ template <typename T> class AVLTreeSet : public Set<T> {
 public:
   AVLTreeSet() : root_(nullptr), size_(0) {}
 
-  int Empty(){
-      // return (size_ == 0) ? 1 : 0;
-  };
-  int Size(){
-      // return size_;
-  };
-  int Insert(T x){
-      //
+  int Empty() { return (size_ == 0) ? 1 : 0; };
+
+  int Size() { return size_; };
+
+  int Insert(T x) {
+    //
   };
   int Find(T x){
       // if (root_ == nullptr)
@@ -61,18 +59,20 @@ public:
 
       // return 0;
   };
-  std::string Minimum(T x){
-      // Node<T> *node = FindNode(data);
 
-      // if (node == nullptr) {
-      //   return nullptr;
-      // }
+  // 노드 x가 루트인 부분트리에서 최소 key를 갖는 노드의 key와 depth를 공백으로
+  // 구분하여 리턴
+  std::string Minimum(T x) {
+    AVLTreeNode *node = FindNode(x);
 
-      // while (node->left_child != nullptr) {
-      //   node = node->left_child;
-      // }
+    if (node == nullptr)
+      return "Not found";
 
-      // return node;
+    while (node->get_left() != nullptr)
+      node = node->get_left();
+
+    return std::to_string(node->get_key()) + " " +
+           std::to_string(FindDepth(node->get_key()));
   };
 
   // 노드 x가 루트인 부분트리에서 최대 key를갖는 노드의 key와 depth를 공백으로 구분하여 리턴
