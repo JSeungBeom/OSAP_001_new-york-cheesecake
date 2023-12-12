@@ -1,6 +1,7 @@
 #include "avl_tree_set.cc"
-#include <string>
 #include "gtest/gtest.h"
+#include <string>
+
 
 class SetEmptyTestFixture : public testing::Test {
 public:
@@ -30,14 +31,14 @@ void SetEmptyTestFixture::TearDown() {
 }
 
 class SetTestFixture : public testing::Test {
-  public:
-    SetTestFixture();
-    virtual ~SetTestFixture();
-    void SetUp() override;
-    void TearDown() override;
+public:
+  SetTestFixture();
+  virtual ~SetTestFixture();
+  void SetUp() override;
+  void TearDown() override;
 
-    protected:
-      AVLTreeSet<int> avl_tree_set_;
+protected:
+  AVLTreeSet<int> avl_tree_set_;
 };
 
 SetTestFixture::SetTestFixture() {
@@ -87,12 +88,12 @@ TEST_F(SetTestFixture, TestMinimum) {
 }
 
 TEST_F(SetTestFixture, TestMaximum) {
-    EXPECT_EQ("Not found", avl_tree_set_.Maximum(4));
-    EXPECT_EQ("2 10", avl_tree_set_.Maximum(3));
-    EXPECT_EQ("2 10", avl_tree_set_.Maximum(5));
-    EXPECT_EQ("2 2", avl_tree_set_.Maximum(2));
-    EXPECT_EQ("1 1", avl_tree_set_.Maximum(1));
-    EXPECT_EQ("2 10", avl_tree_set_.Maximum(10));
+  EXPECT_EQ("Not found", avl_tree_set_.Maximum(4));
+  EXPECT_EQ("2 10", avl_tree_set_.Maximum(3));
+  EXPECT_EQ("2 10", avl_tree_set_.Maximum(5));
+  EXPECT_EQ("2 2", avl_tree_set_.Maximum(2));
+  EXPECT_EQ("1 1", avl_tree_set_.Maximum(1));
+  EXPECT_EQ("2 10", avl_tree_set_.Maximum(10));
 }
 
 int main(int argc, char **argv) {
