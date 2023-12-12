@@ -140,6 +140,21 @@ private:
       return node->height_;
   };
 
+  // key가 x인 노드의 깊이를 반환하는 함수
+  int FindDepth(T x) { return FindDepthUtil(root_, x); }
+  int FindDepthUtil(AVLTreeNode *node, T x) {
+    if (node == nullptr)
+      return -1;
+
+    int distance = -1;
+    if ((node->get_key() == x) ||
+        ((distance = FindDepthUtil(node->get_left(), x)) >= 0) ||
+        ((distance = FindDepthUtil(node->get_right(), x)) >= 0))
+      return distance + 1;
+
+    return distance;
+  }
+
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node){
       if (node != nullptr)
