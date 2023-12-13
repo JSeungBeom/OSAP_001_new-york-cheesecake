@@ -2,7 +2,6 @@
 #include "gtest/gtest.h"
 #include <string>
 
-
 class SetEmptyTestFixture : public testing::Test {
 public:
   SetEmptyTestFixture();
@@ -62,6 +61,20 @@ void SetTestFixture::TearDown() {
   // std::cout << "SetTestFixture: TearDown called\n";
 }
 
+class MaximumFixture : public testing::TestWithParam<std::tuple<int, std::string>>{
+  public:
+  protected:
+    AVLTreeSet<int> avl_tree_set_;
+};
+
+INSTANTIATE_TEST_CASE_P(
+  MaximumTests, MaximumFixture,
+  testing::Values(std::make_tuple(5, "15 3"), std::make_tuple(7, "7 2"),
+                  std::make_tuple(4, "4 1"), std::make_tuple(9, "9 3"),
+                  std::make_tuple(3, "3 2"), std::make_tuple(12, "15 3"),
+                  std::make_tuple(8, "15 3"), std::make_tuple(15, "15 3"),
+                  std::make_tuple(1, "Not found")));
+
 TEST_F(SetEmptyTestFixture, TestEmpty) {
   EXPECT_EQ(avl_tree_set_.Empty(), 1);
   avl_tree_set_.Insert(1);
@@ -95,6 +108,30 @@ TEST_F(SetTestFixture, TestMaximum) {
   EXPECT_EQ("1 1", avl_tree_set_.Maximum(1));
   EXPECT_EQ("2 10", avl_tree_set_.Maximum(10));
 }
+
+TEST_P(MaximumFixture, TestMaximum){
+    std::tuple<int, std::string> tuple = GetParam();
+
+    int param = std::get<0> (tuple);
+    std::string expected_value = std::get<1>(tuple);
+
+    std::cout << "param = " << param << " expected value = " << expected_value << '\n';
+
+    avl_tree_set_.Insert(5);
+    avl_tree_set_.Insert(8);
+    avl_tree_set_.Insert(12);
+    avl_tree_set_.Insert(4);
+    avl_tree_set_.Insert(3);
+    avl_tree_set_.Insert(7);
+    avl_tree_set_.Insert(15);
+    avl_tree_set_.Insert(9);
+
+    std::string key_depth = avl_tree_set_.Maximum(param);
+
+    ASSERT_EQ(expected_value, key_depth);
+}
+
+
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
