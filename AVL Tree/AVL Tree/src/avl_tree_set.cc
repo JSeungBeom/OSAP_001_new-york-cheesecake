@@ -3,6 +3,12 @@
 #include <string>
 #include <vector>
 
+// A macro to disallow copy constructor and operator=
+// This should be used in the private: declarations for a class.
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+
 template <typename T> class Set {
 public:
   virtual int Empty() = 0;
@@ -30,6 +36,10 @@ private:
 template <typename T> class AVLTreeSet : public Set<T> {
 public:
   AVLTreeSet() : root_(nullptr), size_(0) {}
+
+  ~AVLTreeSet() {
+    delete root_;
+  }
 
   int Empty() { return (size_ == 0) ? 1 : 0; };
 
@@ -135,6 +145,7 @@ private:
     AVLTreeNode *left_;
     AVLTreeNode *right_;
     AVLTreeNode *parent_;
+    DISALLOW_COPY_AND_ASSIGN(AVLTreeNode);
   };
 
   // 노드의 깊이를 구하는 함수
@@ -219,4 +230,5 @@ private:
 
   AVLTreeNode *root_;
   int size_;
+  DISALLOW_COPY_AND_ASSIGN(AVLTreeSet);
 };
