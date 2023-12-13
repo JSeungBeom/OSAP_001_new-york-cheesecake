@@ -37,7 +37,7 @@ public:
 
   int Insert(T x) {
     size_ += 1;
-    return FindDepth(x);
+    return Find(x);
   };
   int Find(T x){
       // if (root_ == nullptr)
@@ -73,7 +73,7 @@ public:
       node = node->get_left();
 
     return std::to_string(node->get_key()) + " " +
-           std::to_string(FindDepth(node->get_key()));
+           std::to_string(Find(node->get_key()));
   };
 
   // 노드 x가 루트인 부분트리에서 최대 key를갖는 노드의 key와 depth를 공백으로
@@ -143,21 +143,6 @@ private:
       return -1;
     return node->height_;
   };
-
-  // key가 x인 노드의 깊이를 반환하는 함수
-  int FindDepth(T x) { return FindDepthUtil(root_, x); }
-  int FindDepthUtil(AVLTreeNode *node, T x) {
-    if (node == nullptr)
-      return -1;
-
-    int distance = -1;
-    if ((node->get_key() == x) ||
-        ((distance = FindDepthUtil(node->get_left(), x)) >= 0) ||
-        ((distance = FindDepthUtil(node->get_right(), x)) >= 0))
-      return distance + 1;
-
-    return distance;
-  }
 
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
