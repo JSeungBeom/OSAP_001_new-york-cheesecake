@@ -88,8 +88,8 @@ public:
       node = node->get_right();
     }
 
-    std::string tmp = std::to_string(node->get_height()) + " " +
-                      std::to_string(node->get_key());
+    std::string tmp = std::to_string(node->get_key()) + " " +
+                      std::to_string(Find(node->get_key()));
 
     return tmp;
   };
