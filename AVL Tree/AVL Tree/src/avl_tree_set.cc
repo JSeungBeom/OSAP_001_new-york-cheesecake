@@ -9,6 +9,8 @@
   TypeName(const TypeName&);               \
   void operator=(const TypeName&)
 
+bool Destructed = false;
+
 template <typename T> class Set {
 public:
   virtual int Empty() = 0;
@@ -38,6 +40,7 @@ public:
   AVLTreeSet() : root_(nullptr), size_(0) {}
 
   ~AVLTreeSet() {
+    Destructed = true;
     delete root_;
   }
 

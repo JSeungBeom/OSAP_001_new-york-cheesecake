@@ -2,6 +2,22 @@
 #include "gtest/gtest.h"
 #include <string>
 
+TEST(SetTest, TestConstructor){
+  AVLTreeSet<int> avl_tree_set;
+
+  ASSERT_EQ(avl_tree_set.Size(), 0);
+  ASSERT_EQ(avl_tree_set.Empty(), 1);
+}
+
+TEST(SetTest, TestDestructor){
+  Destructed = false;
+  AVLTreeSet<int> *avl_tree_set = new AVLTreeSet<int>();
+
+  delete avl_tree_set;
+
+  ASSERT_TRUE(Destructed);
+}
+
 class SetEmptyTestFixture : public testing::Test {
 public:
   SetEmptyTestFixture();
