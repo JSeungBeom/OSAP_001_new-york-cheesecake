@@ -1,7 +1,35 @@
+/*
+Copyright (C)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>
+
+2023 by Seungbeom Jang <wkdtmf357@gmail.com>
+
+*/
+
+// A macro to disallow copy constructor and operator=
+// This should be used in the private: declarations for a class.
+#define DISALLOW_COPY_AND_ASSIGN(TypeName)                                     \
+  TypeName(const TypeName &);                                                  \
+  void operator=(const TypeName &)
+
 #include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
+
+bool Destructed = false;
 
 template <typename T> class Set {
 public:
@@ -30,6 +58,11 @@ private:
 template <typename T> class AVLTreeSet : public Set<T> {
 public:
   AVLTreeSet() : root_(nullptr), size_(0) {}
+
+  ~AVLTreeSet() {
+    Destructed = true;
+    delete root_;
+  }
 
   int Empty() { return (size_ == 0) ? 1 : 0; };
 
@@ -88,8 +121,8 @@ public:
       node = node->get_right();
     }
 
-    std::string tmp = std::to_string(node->get_height()) + " " +
-                      std::to_string(node->get_key());
+    std::string tmp = std::to_string(node->get_key()) + " " +
+                      std::to_string(Find(node->get_key()));
 
     return tmp;
   };
@@ -135,6 +168,7 @@ private:
     AVLTreeNode *left_;
     AVLTreeNode *right_;
     AVLTreeNode *parent_;
+    DISALLOW_COPY_AND_ASSIGN(AVLTreeNode);
   };
 
   // 노드의 깊이를 구하는 함수
@@ -219,4 +253,5 @@ private:
 
   AVLTreeNode *root_;
   int size_;
+  DISALLOW_COPY_AND_ASSIGN(AVLTreeSet);
 };
