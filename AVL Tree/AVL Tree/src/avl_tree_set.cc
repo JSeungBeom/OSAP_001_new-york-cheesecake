@@ -152,7 +152,7 @@ private:
   class AVLTreeNode : public Node<T> {
   public:
     AVLTreeNode(T key)
-        : Node<T>(key), size_(1), height_(1), left_(nullptr), right_(nullptr),
+        : Node<T>(key), size_(1), height_(0), left_(nullptr), right_(nullptr),
           parent_(nullptr) {}
 
     // 후위 순회 방식으로 노드 삭제
@@ -195,9 +195,9 @@ private:
 
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
-    node->set_height(std::max(((node->get_left() == nullptr) ? 1 : 
+    node->set_height(std::max(((node->get_left() == nullptr) ? 0 : 
                                   node->get_left()->get_height()+1),
-                              ((node->get_right() == nullptr) ? 1 : 
+                              ((node->get_right() == nullptr) ? 0 : 
                                   node->get_right()->get_height() + 1)));
   };
 
@@ -287,8 +287,8 @@ private:
 
     AVLTreeNode *left = node->get_left();
     AVLTreeNode *right = node->get_right();
-    int left_height_value = (left == nullptr) ? 1 : left->get_height() + 1;
-    int right_height_value = (right == nullptr) ? 1 : right->get_height() + 1;
+    int left_height_value = (left == nullptr) ? 0 : left->get_height() + 1;
+    int right_height_value = (right == nullptr) ? 0 : right->get_height() + 1;
 
     return left_height_value - right_height_value;
   }
@@ -315,7 +315,7 @@ private:
     else if (left == nullptr && right != nullptr)
       node->set_height(right->get_height() + 1);
     else if(left==nullptr&&right==nullptr)
-      node->set_height(1);
+      node->set_height(0);
 
     // 크기 갱신
     node->set_size(node->get_size() + 1);
