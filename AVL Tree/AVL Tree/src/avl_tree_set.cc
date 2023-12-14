@@ -57,19 +57,19 @@ private:
 
 template <typename T> class AVLTreeSet : public Set<T> {
 public:
-  AVLTreeSet() : root_(nullptr), size_(0) {}
+  AVLTreeSet() : root_(nullptr) {}
 
   ~AVLTreeSet() {
     Destructed = true;
     delete root_;
   }
 
-  int Empty() { return (size_ == 0) ? 1 : 0; };
+  int Empty() { return !Size(); };
 
-  int Size() { return size_; };
+  int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
 
   int Insert(T x) {
-    size_ += 1;
+    root_ = InsertUtil(root_, x);
     return Find(x);
   };
   int Find(T x){
@@ -127,18 +127,26 @@ public:
     return tmp;
   };
 
-  std::string Rank(T x){
-      //
+  // key가 x인 노드의 rank를 반환하는 함수(노드가 없다면 "0" 반환)
+  // rank는 Set에서 x보다 작은 수 + 1
+  std::string Rank(T x) {
+    int rank = RankUtil(x, root_);
+    if (rank == 0)
+      return "0";
+    else
+      return std::to_string(Find(x)) + " " + std::to_string(rank);
   };
-  int Erase(T x){
-      //
+
+  int Erase(T x) {
+    //
+    return -2;
   };
 
 private:
   class AVLTreeNode : public Node<T> {
   public:
     AVLTreeNode(T key)
-        : Node<T>(key), height_(0), left_(nullptr), right_(nullptr),
+        : Node<T>(key), size_(1), height_(0), left_(nullptr), right_(nullptr),
           parent_(nullptr) {}
 
     // 후위 순회 방식으로 노드 삭제
@@ -147,23 +155,23 @@ private:
       delete right_;
     }
 
-    void set_height(int height) { height_ = height; }
+    void set_size(int size) { size_ = size; }
+    int get_size() { return size_; }
 
+    void set_height(int height) { height_ = height; }
     int get_height() { return height_; }
 
     void set_left(AVLTreeNode *left) { left_ = left; }
-
     AVLTreeNode *get_left() { return left_; }
 
     void set_right(AVLTreeNode *right) { right_ = right; }
-
     AVLTreeNode *get_right() { return right_; }
 
     void set_parent(AVLTreeNode *parent) { parent_ = parent; }
-
     AVLTreeNode *get_parent() { return parent_; }
 
   private:
+    int size_;
     int height_;
     AVLTreeNode *left_;
     AVLTreeNode *right_;
@@ -251,7 +259,31 @@ private:
     return nullptr;
   };
 
+  // 재귀적으로 rank를 계산하는 함수
+  int RankUtil(T x, AVLTreeNode *node) {
+    if (node == nullptr) {
+      return 0;
+    }
+
+    if (x < node->get_key())
+      return RankUtil(x, node->get_left());
+
+    int rank = 1;
+
+    if (x > node->get_key()) {
+      int child_rank = RankUtil(x, node->get_right());
+      if (child_rank == 0)
+        return 0;
+      rank += child_rank;
+    }
+
+    AVLTreeNode *left = node->get_left();
+    if (left != nullptr)
+      rank += left->get_size();
+
+    return rank;
+  }
+
   AVLTreeNode *root_;
-  int size_;
   DISALLOW_COPY_AND_ASSIGN(AVLTreeSet);
 };
