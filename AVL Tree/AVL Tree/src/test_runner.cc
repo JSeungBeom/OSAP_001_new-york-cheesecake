@@ -112,6 +112,20 @@ INSTANTIATE_TEST_CASE_P(
                     std::make_tuple(8, "15 3"), std::make_tuple(15, "15 3"),
                     std::make_tuple(1, "Not found")));
 
+class RankFixture
+    : public testing::TestWithParam<std::tuple<int, std::string>> {
+public:
+protected:
+  AVLTreeSet<int> avl_tree_set_;
+};
+
+INSTANTIATE_TEST_CASE_P(
+    RankTests, RankFixture,
+    testing::Values(std::make_tuple(5, "0 3"), std::make_tuple(7, "2 4"),
+                    std::make_tuple(4, "1 2"), std::make_tuple(9, "3 6"),
+                    std::make_tuple(3, "2 1"), std::make_tuple(12, "2 7"),
+                    std::make_tuple(8, "1 5"), std::make_tuple(15, "3 8"),
+                    std::make_tuple(1, "0")));
 TEST_F(SetEmptyTestFixture, TestEmpty) {
   EXPECT_EQ(avl_tree_set_.Empty(), 1);
   avl_tree_set_.Insert(1);
@@ -120,13 +134,11 @@ TEST_F(SetEmptyTestFixture, TestEmpty) {
   EXPECT_EQ(avl_tree_set_.Empty(), 0);
 }
 
-TEST_F(SetEmptyTestFixture, TestSize) {
+TEST_F(SetEmptyTestFixture, TestSizeEmptyCase) {
   EXPECT_EQ(avl_tree_set_.Size(), 0);
-  avl_tree_set_.Insert(1);
-  EXPECT_EQ(avl_tree_set_.Size(), 1);
-  avl_tree_set_.Insert(5);
-  EXPECT_EQ(avl_tree_set_.Size(), 2);
 }
+
+TEST_F(SetTestFixture, TestSize) { EXPECT_EQ(avl_tree_set_.Size(), 5); }
 
 TEST_F(SetTestFixture, TestMinimum) {
   EXPECT_EQ("Not found", avl_tree_set_.Minimum(4));
@@ -165,6 +177,29 @@ TEST_P(MaximumFixture, TestMaximum) {
   avl_tree_set_.Insert(9);
 
   std::string key_depth = avl_tree_set_.Maximum(param);
+
+  ASSERT_EQ(expected_value, key_depth);
+}
+
+TEST_P(RankFixture, TestRank) {
+  std::tuple<int, std::string> tuple = GetParam();
+
+  int param = std::get<0>(tuple);
+  std::string expected_value = std::get<1>(tuple);
+
+  // std::cout << "param = " << param << " expected value = " << expected_value
+  //           << '\n';
+
+  avl_tree_set_.Insert(5);
+  avl_tree_set_.Insert(8);
+  avl_tree_set_.Insert(12);
+  avl_tree_set_.Insert(4);
+  avl_tree_set_.Insert(3);
+  avl_tree_set_.Insert(7);
+  avl_tree_set_.Insert(15);
+  avl_tree_set_.Insert(9);
+
+  std::string key_depth = avl_tree_set_.Rank(param);
 
   ASSERT_EQ(expected_value, key_depth);
 }
