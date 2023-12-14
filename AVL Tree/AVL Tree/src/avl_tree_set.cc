@@ -69,8 +69,9 @@ public:
   int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
 
   int Insert(T x) {
-    root_ = InsertUtil(root_, x);
-    return Find(x);
+    // root_ = InsertUtil(root_, x);
+    // return Find(x);
+    return -2;
   };
   int Find(T x){
       // if (root_ == nullptr)

@@ -139,7 +139,6 @@ TEST_F(SetEmptyTestFixture, TestSizeEmptyCase) {
 }
 
 TEST_F(SetTestFixture, TestSize) { EXPECT_EQ(avl_tree_set_.Size(), 5); }
-}
 
 TEST_F(SetTestFixture, TestMinimum) {
   EXPECT_EQ("Not found", avl_tree_set_.Minimum(4));
