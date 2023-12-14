@@ -18,4 +18,53 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 
 */
 
-int main() { return 0; }
+#include "avl_tree_set.cc"
+#include <iostream>
+
+using namespace std;
+
+int T, Q;
+
+int main() { 
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> T;
+    
+    AVLTreeSet<int> avl_tree_set;
+
+    string func;
+    int x;
+
+    while(T--){
+        cin >> Q;
+
+        while(Q--){
+            cin >> func;
+
+            if(func == "minimum"){
+                cin >> x;
+                cout << avl_tree_set.Minimum(x) << '\n';
+            }
+            else if(func == "maximum"){
+                cin >> x;
+                cout << avl_tree_set.Maximum(x) << '\n';
+            }
+            else if(func == "empty"){
+                cout << avl_tree_set.Empty() << '\n';
+            }
+            else if(func == "size"){
+                cout << avl_tree_set.Size() << '\n';
+            }
+            else if(func == "find"){
+                cin >> x;
+                cout << avl_tree_set.Find(x) << '\n';
+            }
+            else if(func == "insert"){
+                cin >> x;
+                cout << avl_tree_set.Insert(x) << '\n';
+            }
+        }
+    }
+}

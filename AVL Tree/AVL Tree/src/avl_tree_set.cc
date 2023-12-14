@@ -66,7 +66,7 @@ public:
     delete root_;
   }
 
-  //set이 비어있으면 1, 비어있지 않으면 0을 리턴
+  // set이 비어있으면 1, 비어있지 않으면 0을 리턴
   int Empty() { return !Size(); };
 
   int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
@@ -126,10 +126,8 @@ public:
       node = node->get_right();
     }
 
-    std::string tmp = std::to_string(node->get_key()) + " " +
-                      std::to_string(Find(node->get_key()));
-
-    return tmp;
+    return std::to_string(node->get_key()) + " " +
+           std::to_string(Find(node->get_key()));
   };
 
   // key가 x인 노드의 rank를 반환하는 함수(노드가 없다면 "0" 반환)
@@ -194,8 +192,13 @@ private:
 
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
-    if (node != nullptr)
-      node->set_height(1 + std::max(Height(node->get_left()), Height(node->get_right())));
+    node->set_height(std::max(((node->get_left() == nullptr)
+                                   ? 0
+                                   : node->get_left()->get_height()),
+                              ((node->get_right() == nullptr)
+                                   ? 0
+                                   : node->get_right()->get_height())) +
+                     1);
   };
 
   // 노드의 크기를 업데이트하는 함수
@@ -291,14 +294,14 @@ private:
   }
 
   // 재귀적으로 삽입을 실행하는 함수
-  AVLTreeNode *InsertUtil(AVLTreeNode *node, T data) {
+  AVLTreeNode *InsertUtil(AVLTreeNode *node, T x) {
     if (node == nullptr)
-      return new AVLTreeNode(data);
+      return new AVLTreeNode(x);
 
-    if (data < node->get_key())
-      node->set_left(InsertUtil(node->get_left(), data));
-    else if (data > node->get_key())
-      node->set_right(InsertUtil(node->get_right(), data));
+    if (x < node->get_key())
+      node->set_left(InsertUtil(node->get_left(), x));
+    else if (x > node->get_key())
+      node->set_right(InsertUtil(node->get_right(), x));
     else
       return node;
 
@@ -346,3 +349,43 @@ private:
   AVLTreeNode *root_;
   DISALLOW_COPY_AND_ASSIGN(AVLTreeSet);
 };
+
+int main() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(NULL);
+  std::cout.tie(NULL);
+  int T, Q;
+
+  std::cin >> T;
+
+  AVLTreeSet<int> avl_tree_set;
+
+  std::string func;
+  int x;
+
+  while (T--) {
+    std::cin >> Q;
+
+    while (Q--) {
+      std::cin >> func;
+
+      if (func == "minimum") {
+        std::cin >> x;
+        std::cout << avl_tree_set.Minimum(x) << '\n';
+      } else if (func == "maximum") {
+        std::cin >> x;
+        std::cout << avl_tree_set.Maximum(x) << '\n';
+      } else if (func == "empty") {
+        std::cout << avl_tree_set.Empty() << '\n';
+      } else if (func == "size") {
+        std::cout << avl_tree_set.Size() << '\n';
+      } else if (func == "find") {
+        std::cin >> x;
+        std::cout << avl_tree_set.Find(x) << '\n';
+      } else if (func == "insert") {
+        std::cin >> x;
+        std::cout << avl_tree_set.Insert(x) << '\n';
+      }
+    }
+  }
+}
