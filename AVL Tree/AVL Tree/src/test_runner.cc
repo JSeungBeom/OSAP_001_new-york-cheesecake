@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 #include "gtest/gtest.h"
 #include <string>
 
+// 생성자 테스트
 TEST(SetTest, TestConstructor) {
   AVLTreeSet<int> avl_tree_set;
 
@@ -29,6 +30,7 @@ TEST(SetTest, TestConstructor) {
   ASSERT_EQ(avl_tree_set.Empty(), 1);
 }
 
+// 소멸자 테스트
 TEST(SetTest, TestDestructor) {
   Destructed = false;
   AVLTreeSet<int> *avl_tree_set = new AVLTreeSet<int>();
@@ -36,6 +38,47 @@ TEST(SetTest, TestDestructor) {
   delete avl_tree_set;
 
   ASSERT_TRUE(Destructed);
+}
+
+// Insert 테스트, (Normal, LL, RR, LR, RL Case)
+TEST(InsertTest, TestNormalCase){
+  AVLTreeSet<int> avl_tree_set;
+  
+  EXPECT_EQ(0, avl_tree_set.Insert(3));
+  EXPECT_EQ(1, avl_tree_set.Insert(5));
+  EXPECT_EQ(1, avl_tree_set.Insert(1));
+}
+
+TEST(InsertTest, TestLLCase){
+  AVLTreeSet<int> avl_tree_set;
+  
+  EXPECT_EQ(0, avl_tree_set.Insert(3));
+  EXPECT_EQ(1, avl_tree_set.Insert(2));
+  EXPECT_EQ(1, avl_tree_set.Insert(1));
+}
+
+TEST(InsertTest, TestRRCase){
+  AVLTreeSet<int> avl_tree_set;
+  
+  EXPECT_EQ(0, avl_tree_set.Insert(1));
+  EXPECT_EQ(1, avl_tree_set.Insert(2));
+  EXPECT_EQ(1, avl_tree_set.Insert(3));
+}
+
+TEST(InsertTest, TestLRCaseInsert){
+  AVLTreeSet<int> avl_tree_set;
+  
+  EXPECT_EQ(0, avl_tree_set.Insert(3));
+  EXPECT_EQ(1, avl_tree_set.Insert(1));
+  EXPECT_EQ(0, avl_tree_set.Insert(2));
+}
+
+TEST(InsertTest, TestRLCaseInsert){
+  AVLTreeSet<int> avl_tree_set;
+  
+  EXPECT_EQ(0, avl_tree_set.Insert(3));
+  EXPECT_EQ(1, avl_tree_set.Insert(5));
+  EXPECT_EQ(0, avl_tree_set.Insert(4));
 }
 
 class SetEmptyTestFixture : public testing::Test {
@@ -97,6 +140,21 @@ void SetTestFixture::TearDown() {
   // std::cout << "SetTestFixture: TearDown called\n";
 }
 
+class FindFixture
+    : public testing::TestWithParam<std::tuple<int, int>> {
+public:
+protected:
+  AVLTreeSet<int> avl_tree_set_;
+};
+
+INSTANTIATE_TEST_CASE_P(
+    FindTests, FindFixture,
+    testing::Values(std::make_tuple(5, 0), std::make_tuple(7, 2),
+                    std::make_tuple(4, 1), std::make_tuple(9, 3),
+                    std::make_tuple(3, 2), std::make_tuple(12, 2),
+                    std::make_tuple(8, 1), std::make_tuple(15, 3),
+                    std::make_tuple(1, 0)));
+
 class MaximumFixture
     : public testing::TestWithParam<std::tuple<int, std::string>> {
 public:
@@ -111,6 +169,22 @@ INSTANTIATE_TEST_CASE_P(
                     std::make_tuple(3, "3 2"), std::make_tuple(12, "15 3"),
                     std::make_tuple(8, "15 3"), std::make_tuple(15, "15 3"),
                     std::make_tuple(1, "Not found")));
+
+class MinimumFixture
+    : public testing::TestWithParam<std::tuple<int, std::string>> {
+public:
+protected:
+  AVLTreeSet<int> avl_tree_set_;
+};
+
+INSTANTIATE_TEST_CASE_P(
+    MinimumTests, MinimumFixture,
+    testing::Values(std::make_tuple(5, "3 2"), std::make_tuple(7, "7 2"),
+                    std::make_tuple(4, "3 2"), std::make_tuple(9, "9 3"),
+                    std::make_tuple(3, "3 2"), std::make_tuple(12, "9 3"),
+                    std::make_tuple(8, "7 2"), std::make_tuple(15, "15 3"),
+                    std::make_tuple(1, "Not found")));                    
+                    
 
 class RankFixture
     : public testing::TestWithParam<std::tuple<int, std::string>> {
@@ -140,6 +214,15 @@ TEST_F(SetEmptyTestFixture, TestSizeEmptyCase) {
 
 TEST_F(SetTestFixture, TestSize) { EXPECT_EQ(avl_tree_set_.Size(), 5); }
 
+TEST_F(SetTestFixture, TestFind){
+  EXPECT_EQ(0, avl_tree_set_.Find(4));
+  EXPECT_EQ(1, avl_tree_set_.Find(1));
+  EXPECT_EQ(1, avl_tree_set_.Find(5));
+  EXPECT_EQ(0, avl_tree_set_.Find(3));
+  EXPECT_EQ(2, avl_tree_set_.Find(10));
+  EXPECT_EQ(2, avl_tree_set_.Find(2));
+}
+
 TEST_F(SetTestFixture, TestMinimum) {
   EXPECT_EQ("Not found", avl_tree_set_.Minimum(4));
   EXPECT_EQ("1 1", avl_tree_set_.Minimum(1));
@@ -151,11 +234,34 @@ TEST_F(SetTestFixture, TestMinimum) {
 
 TEST_F(SetTestFixture, TestMaximum) {
   EXPECT_EQ("Not found", avl_tree_set_.Maximum(4));
-  EXPECT_EQ("2 10", avl_tree_set_.Maximum(3));
-  EXPECT_EQ("2 10", avl_tree_set_.Maximum(5));
+  EXPECT_EQ("10 2", avl_tree_set_.Maximum(3));
+  EXPECT_EQ("10 2", avl_tree_set_.Maximum(5));
   EXPECT_EQ("2 2", avl_tree_set_.Maximum(2));
-  EXPECT_EQ("1 1", avl_tree_set_.Maximum(1));
-  EXPECT_EQ("2 10", avl_tree_set_.Maximum(10));
+  EXPECT_EQ("2 2", avl_tree_set_.Maximum(1));
+  EXPECT_EQ("10 2", avl_tree_set_.Maximum(10));
+}
+
+TEST_P(FindFixture, TestFind) {
+  std::tuple<int, int> tuple = GetParam();
+
+  int param = std::get<0>(tuple);
+  int expected_value = std::get<1>(tuple);
+
+  // std::cout << "param = " << param << " expected value = " << expected_value
+  //           << '\n';
+
+  avl_tree_set_.Insert(5);
+  avl_tree_set_.Insert(8);
+  avl_tree_set_.Insert(12);
+  avl_tree_set_.Insert(4);
+  avl_tree_set_.Insert(3);
+  avl_tree_set_.Insert(7);
+  avl_tree_set_.Insert(15);
+  avl_tree_set_.Insert(9);
+
+  int depth = avl_tree_set_.Find(param);
+
+  ASSERT_EQ(expected_value, depth);
 }
 
 TEST_P(MaximumFixture, TestMaximum) {
@@ -164,8 +270,8 @@ TEST_P(MaximumFixture, TestMaximum) {
   int param = std::get<0>(tuple);
   std::string expected_value = std::get<1>(tuple);
 
-  std::cout << "param = " << param << " expected value = " << expected_value
-            << '\n';
+  // std::cout << "param = " << param << " expected value = " << expected_value
+  //           << '\n';
 
   avl_tree_set_.Insert(5);
   avl_tree_set_.Insert(8);
@@ -177,6 +283,29 @@ TEST_P(MaximumFixture, TestMaximum) {
   avl_tree_set_.Insert(9);
 
   std::string key_depth = avl_tree_set_.Maximum(param);
+
+  ASSERT_EQ(expected_value, key_depth);
+}
+
+TEST_P(MinimumFixture, TestMinimum) {
+  std::tuple<int, std::string> tuple = GetParam();
+
+  int param = std::get<0>(tuple);
+  std::string expected_value = std::get<1>(tuple);
+
+  // std::cout << "param = " << param << " expected value = " << expected_value
+  //           << '\n';
+
+  avl_tree_set_.Insert(5);
+  avl_tree_set_.Insert(8);
+  avl_tree_set_.Insert(12);
+  avl_tree_set_.Insert(4);
+  avl_tree_set_.Insert(3);
+  avl_tree_set_.Insert(7);
+  avl_tree_set_.Insert(15);
+  avl_tree_set_.Insert(9);
+
+  std::string key_depth = avl_tree_set_.Minimum(param);
 
   ASSERT_EQ(expected_value, key_depth);
 }
