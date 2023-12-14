@@ -57,42 +57,46 @@ private:
 
 template <typename T> class AVLTreeSet : public Set<T> {
 public:
+  // 생성자
   AVLTreeSet() : root_(nullptr) {}
 
+  // 소멸자
   ~AVLTreeSet() {
     Destructed = true;
     delete root_;
   }
 
+  //set이 비어있으면 1, 비어있지 않으면 0을 리턴
   int Empty() { return !Size(); };
 
   int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
 
   int Insert(T x) {
-    // root_ = InsertUtil(root_, x);
-    // return Find(x);
-    return -2;
+    root_ = InsertUtil(root_, x);
+    return Find(x);
   };
-  int Find(T x){
-      // if (root_ == nullptr)
-      //   return 0;
 
-      // Node<T> *node = root_;
-      // int depth = 0;
+  // 노드 x의 depth를 리턴, 없다면 0 리턴
+  int Find(T x) {
+    if (root_ == nullptr)
+      return 0;
 
-      // while (node != nullptr) {
-      //   if (data == node->data) {
-      //     return depth;
-      //   } else if (data < node->data) {
-      //     depth++;
-      //     node = node->left_child;
-      //   } else {
-      //     depth++;
-      //     node = node->right_child;
-      //   }
-      // }
+    AVLTreeNode *node = root_;
+    int depth = 0;
 
-      // return 0;
+    while (node != nullptr) {
+      if (x == node->get_key()) {
+        return depth;
+      } else if (x < node->get_key()) {
+        depth++;
+        node = node->get_left();
+      } else {
+        depth++;
+        node = node->get_right();
+      }
+    }
+
+    return 0;
   };
 
   // 노드 x가 루트인 부분트리에서 최소 key를 갖는 노드의 key와 depth를 공백으로
@@ -156,6 +160,7 @@ private:
       delete right_;
     }
 
+    // Getter & Setter
     void set_size(int size) { size_ = size; }
     int get_size() { return size_; }
 
@@ -184,64 +189,76 @@ private:
   int Height(AVLTreeNode *node) {
     if (node == nullptr)
       return -1;
-    return node->height_;
+    return node->get_height();
   };
 
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
     if (node != nullptr)
-      node->height_ = 1 + max(Height(node->left_), Height(node->right_));
+      node->set_height(1 + std::max(Height(node->get_left()), Height(node->get_right())));
   };
 
+  // 노드의 크기를 업데이트하는 함수
+  void UpdateSize(AVLTreeNode *node) {
+    node->set_size(
+        ((node->get_left() == nullptr) ? 0 : node->get_left()->get_size()) +
+        ((node->get_right() == nullptr) ? 0 : node->get_right()->get_size()) +
+        1);
+  }
+
   // Right Roatation을 수행하는 함수
-  void RightRotate(AVLTreeNode *node) {
-    AVLTreeNode *left_child = node->left_;
-    node->left_ = left_child->right_;
+  AVLTreeNode *RightRotate(AVLTreeNode *node) {
+    AVLTreeNode *new_root = node->get_left();
 
-    if (left_child->right_child != nullptr)
-      left_child->right_->parent_ = node;
-
-    left_child->parent_ = node->parent_;
-
-    if (node->parent_ == nullptr)
-      root_ = left_child;
-    else if (node == node->parent_->left_)
-      node->parent_->left_ = left_child;
-    else
-      node->parent_->right_ = left_child;
-
-    left_child->right_ = node;
-    node->parent_ = left_child;
+    node->set_left(new_root->get_right());
+    new_root->set_right(node);
 
     UpdateHeight(node);
-    UpdateHeight(left_child);
+    UpdateSize(node);
+    UpdateHeight(new_root);
+    UpdateSize(new_root);
+
+    return new_root;
   };
 
   // Left Rotation을 실행하는 함수
-  void LeftRotate(AVLTreeNode *node) {
-    AVLTreeNode *right_child = node->right_;
-    node->right_ = right_child->left_;
+  AVLTreeNode *LeftRotate(AVLTreeNode *node) {
+    AVLTreeNode *new_root = node->get_right();
 
-    if (right_child->left_ != nullptr)
-      right_child->left_->parent_ = node;
-
-    right_child->parent_ = node->parent_;
-
-    if (node->parent_ == nullptr)
-      root_ = right_child;
-    else if (node == node->parent_->left_)
-      node->parent_->left_ = right_child;
-    else
-      node->parent_->right_ = right_child;
-
-    right_child->left_ = node;
-    node->parent_ = right_child;
+    node->set_right(new_root->get_left());
+    new_root->set_left(node);
 
     UpdateHeight(node);
-    UpdateHeight(right_child);
+    UpdateSize(node);
+    UpdateHeight(new_root);
+    UpdateSize(new_root);
+
+    return new_root;
   };
 
-  void Balance(AVLTreeNode *node){};
+  // avl tree의 균형을 맞추는 함수
+  AVLTreeNode *Balance(AVLTreeNode *node) {
+    int balance_factor = CalculateBalanceFactor(node);
+
+    if (abs(balance_factor) < 2)
+      return node;
+
+    if (balance_factor > 0) {
+      if (CalculateBalanceFactor(node->get_left()) > 0) {
+        return RightRotate(node);
+      } else {
+        node->set_left(LeftRotate(node->get_left()));
+        return RightRotate(node);
+      }
+    } else {
+      if (CalculateBalanceFactor(node->get_right()) > 0) {
+        node->set_right(RightRotate(node->get_right()));
+        return LeftRotate(node);
+      } else {
+        return LeftRotate(node);
+      }
+    }
+  }
 
   // 특정 키 값을 갖는 노드를 찾는 함수
   AVLTreeNode *FindNode(T x) {
@@ -259,6 +276,47 @@ private:
 
     return nullptr;
   };
+
+  // 균형 요인을 계산하는 함수
+  int CalculateBalanceFactor(AVLTreeNode *node) {
+    if (node == nullptr)
+      return 0;
+
+    AVLTreeNode *left = node->get_left();
+    AVLTreeNode *right = node->get_right();
+    int left_height_value = (left == nullptr) ? 0 : left->get_height() + 1;
+    int right_height_value = (right == nullptr) ? 0 : right->get_height() + 1;
+
+    return left_height_value - right_height_value;
+  }
+
+  // 재귀적으로 삽입을 실행하는 함수
+  AVLTreeNode *InsertUtil(AVLTreeNode *node, T data) {
+    if (node == nullptr)
+      return new AVLTreeNode(data);
+
+    if (data < node->get_key())
+      node->set_left(InsertUtil(node->get_left(), data));
+    else if (data > node->get_key())
+      node->set_right(InsertUtil(node->get_right(), data));
+    else
+      return node;
+
+    // 높이 갱신
+    AVLTreeNode *left = node->get_left();
+    AVLTreeNode *right = node->get_right();
+    if (left != nullptr && right != nullptr)
+      node->set_height(std::max(left->get_height(), right->get_height()) + 1);
+    else if (left != nullptr && right == nullptr)
+      node->set_height(left->get_height() + 1);
+    else if (left == nullptr && right != nullptr)
+      node->set_height(right->get_height() + 1);
+
+    // 크기 갱신
+    node->set_size(node->get_size() + 1);
+
+    return Balance(node);
+  }
 
   // 재귀적으로 rank를 계산하는 함수
   int RankUtil(T x, AVLTreeNode *node) {
