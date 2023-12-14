@@ -21,50 +21,46 @@ along with this program. If not, see <http://www.gnu.org/licenses/>
 #include "avl_tree_set.cc"
 #include <iostream>
 
-using namespace std;
+int main() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(NULL);
+  std::cout.tie(NULL);
+  int T, Q;
 
-int T, Q;
+  std::cin >> T;
 
-int main() { 
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+  std::string func;
+  int x;
 
-    cin >> T;
-    
-    AVLTreeSet<int> avl_tree_set;
+  while (T--) {
+    std::cin >> Q;
+    AVLTreeSet<int> set;
+    while (Q--) {
+      std::cin >> func;
 
-    string func;
-    int x;
-
-    while(T--){
-        cin >> Q;
-
-        while(Q--){
-            cin >> func;
-
-            if(func == "minimum"){
-                cin >> x;
-                cout << avl_tree_set.Minimum(x) << '\n';
-            }
-            else if(func == "maximum"){
-                cin >> x;
-                cout << avl_tree_set.Maximum(x) << '\n';
-            }
-            else if(func == "empty"){
-                cout << avl_tree_set.Empty() << '\n';
-            }
-            else if(func == "size"){
-                cout << avl_tree_set.Size() << '\n';
-            }
-            else if(func == "find"){
-                cin >> x;
-                cout << avl_tree_set.Find(x) << '\n';
-            }
-            else if(func == "insert"){
-                cin >> x;
-                cout << avl_tree_set.Insert(x) << '\n';
-            }
-        }
+      if (func == "minimum") {
+        std::cin >> x;
+        std::cout << set.Minimum(x) << '\n';
+      } else if (func == "maximum") {
+        std::cin >> x;
+        std::cout << set.Maximum(x) << '\n';
+      } else if (func == "empty") {
+        std::cout << set.Empty() << '\n';
+      } else if (func == "size") {
+        std::cout << set.Size() << '\n';
+      } else if (func == "find") {
+        std::cin >> x;
+        std::cout << set.Find(x) << '\n';
+      } else if (func == "insert") {
+        std::cin >> x;
+        std::cout << set.Insert(x) << '\n';
+      } else if (func == "rank") {
+        std::cin >> x;
+        std::cout << set.Rank(x) << '\n';
+      } else if (func == "erase") {
+        std::cin >> x;
+        std::cout << set.Erase(x) << '\n';
+      }
     }
+  }
 }
