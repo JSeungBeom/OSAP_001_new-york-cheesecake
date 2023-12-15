@@ -67,11 +67,14 @@ public:
   }
 
   // set이 비어있으면 1, 비어있지 않으면 0을 리턴
-  int Empty() { 
-    if (Size() > 0) return 0;
-    else return 1;
+  int Empty() {
+    if (Size() > 0)
+      return 0;
+    else
+      return 1;
   };
 
+  // set의 크기를 반환하는 함수
   int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
 
   int Insert(T x) {
@@ -140,6 +143,7 @@ public:
       return std::to_string(Find(x)) + " " + std::to_string(rank);
   };
 
+  // key가 x인 노드의 깊이를 반환하고 삭제하는 함수
   int Erase(T x) {
     int depth = Find(x);
     root_ = EraseUtil(x, root_);
@@ -149,11 +153,11 @@ public:
 private:
   class AVLTreeNode : public Node<T> {
   public:
+    // 생성자
     AVLTreeNode(T key)
-        : Node<T>(key), size_(1), height_(0), left_(nullptr), right_(nullptr),
-          parent_(nullptr) {}
+        : Node<T>(key), size_(1), height_(0), left_(nullptr), right_(nullptr) {}
 
-    // 후위 순회 방식으로 노드 삭제
+    // 소멸자(후위 순회 방식으로 노드 삭제)
     ~AVLTreeNode() {
       delete left_;
       delete right_;
@@ -172,31 +176,22 @@ private:
     void set_right(AVLTreeNode *right) { right_ = right; }
     AVLTreeNode *get_right() { return right_; }
 
-    void set_parent(AVLTreeNode *parent) { parent_ = parent; }
-    AVLTreeNode *get_parent() { return parent_; }
-
   private:
     int size_;
     int height_;
     AVLTreeNode *left_;
     AVLTreeNode *right_;
-    AVLTreeNode *parent_;
     DISALLOW_COPY_AND_ASSIGN(AVLTreeNode);
   };
 
-  // 노드의 깊이를 구하는 함수
-  int Height(AVLTreeNode *node) {
-    if (node == nullptr)
-      return -1;
-    return node->get_height();
-  };
-
-  // 노드의 깊이를 업데이트하는 함수
+  // 노드의 높이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
-    node->set_height(std::max(((node->get_left() == nullptr) ? 0 : 
-                                  node->get_left()->get_height()+1),
-                              ((node->get_right() == nullptr) ? 0 : 
-                                  node->get_right()->get_height() + 1)));
+    node->set_height(std::max(((node->get_left() == nullptr)
+                                   ? 0
+                                   : node->get_left()->get_height() + 1),
+                              ((node->get_right() == nullptr)
+                                   ? 0
+                                   : node->get_right()->get_height() + 1)));
   };
 
   // 노드의 크기를 업데이트하는 함수
@@ -312,7 +307,7 @@ private:
       node->set_height(left->get_height() + 1);
     else if (left == nullptr && right != nullptr)
       node->set_height(right->get_height() + 1);
-    else if(left==nullptr&&right==nullptr)
+    else if (left == nullptr && right == nullptr)
       node->set_height(0);
 
     // 크기 갱신
