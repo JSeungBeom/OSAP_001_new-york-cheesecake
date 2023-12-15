@@ -355,7 +355,7 @@ private:
   }
 
   // 재귀적으로 삭제를 실행하는 함수
-  AVLTreeNode *EraseUtil(int x, AVLTreeNode *node) {
+  AVLTreeNode *EraseUtil(T x, AVLTreeNode *node) {
     if (node == nullptr)
       return node;
 
