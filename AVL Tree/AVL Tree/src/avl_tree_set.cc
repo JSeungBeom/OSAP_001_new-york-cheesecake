@@ -67,7 +67,10 @@ public:
   }
 
   // set이 비어있으면 1, 비어있지 않으면 0을 리턴
-  int Empty() { return !Size(); };
+  int Empty() { 
+    if (Size() > 0) return 0;
+    else return 1;
+  };
 
   int Size() { return (root_ == nullptr) ? 0 : root_->get_size(); };
 
@@ -192,13 +195,10 @@ private:
 
   // 노드의 깊이를 업데이트하는 함수
   void UpdateHeight(AVLTreeNode *node) {
-    node->set_height(std::max(((node->get_left() == nullptr)
-                                   ? 0
-                                   : node->get_left()->get_height()),
-                              ((node->get_right() == nullptr)
-                                   ? 0
-                                   : node->get_right()->get_height())) +
-                     1);
+    node->set_height(std::max(((node->get_left() == nullptr) ? 0 : 
+                                  node->get_left()->get_height()+1),
+                              ((node->get_right() == nullptr) ? 0 : 
+                                  node->get_right()->get_height() + 1)));
   };
 
   // 노드의 크기를 업데이트하는 함수
@@ -314,6 +314,8 @@ private:
       node->set_height(left->get_height() + 1);
     else if (left == nullptr && right != nullptr)
       node->set_height(right->get_height() + 1);
+    else if(left==nullptr&&right==nullptr)
+      node->set_height(0);
 
     // 크기 갱신
     node->set_size(node->get_size() + 1);
