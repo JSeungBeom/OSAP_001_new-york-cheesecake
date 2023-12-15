@@ -402,3 +402,47 @@ private:
   AVLTreeNode *root_;
   DISALLOW_COPY_AND_ASSIGN(AVLTreeSet);
 };
+
+int main() {
+  std::ios::sync_with_stdio(false);
+  std::cin.tie(NULL);
+  std::cout.tie(NULL);
+  int T, Q;
+
+  std::cin >> T;
+
+  std::string func;
+  int x;
+
+  while (T--) {
+    std::cin >> Q;
+    AVLTreeSet<int> set;
+    while (Q--) {
+      std::cin >> func;
+
+      if (func == "minimum") {
+        std::cin >> x;
+        std::cout << set.Minimum(x) << '\n';
+      } else if (func == "maximum") {
+        std::cin >> x;
+        std::cout << set.Maximum(x) << '\n';
+      } else if (func == "empty") {
+        std::cout << set.Empty() << '\n';
+      } else if (func == "size") {
+        std::cout << set.Size() << '\n';
+      } else if (func == "find") {
+        std::cin >> x;
+        std::cout << set.Find(x) << '\n';
+      } else if (func == "insert") {
+        std::cin >> x;
+        std::cout << set.Insert(x) << '\n';
+      } else if (func == "rank") {
+        std::cin >> x;
+        std::cout << set.Rank(x) << '\n';
+      } else if (func == "erase") {
+        std::cin >> x;
+        std::cout << set.Erase(x) << '\n';
+      }
+    }
+  }
+}
