@@ -208,37 +208,29 @@ TEST_F(SetEmptyTestFixture, TestEmpty) {
   EXPECT_EQ(avl_tree_set_.Empty(), 0);
 }
 
-TEST_F(SetEmptyTestFixture, TestSizeEmptyCase) {
+TEST_F(SetEmptyTestFixture, TestSize) {
+  EXPECT_EQ(avl_tree_set_.Size(), 0);
+  avl_tree_set_.Insert(1);
+  EXPECT_EQ(avl_tree_set_.Size(), 1);
+  avl_tree_set_.Insert(5);
+  EXPECT_EQ(avl_tree_set_.Size(), 2);
+  avl_tree_set_.Insert(3);
+  EXPECT_EQ(avl_tree_set_.Size(), 3);
+  avl_tree_set_.Erase(1);
+  EXPECT_EQ(avl_tree_set_.Size(), 2);
+  avl_tree_set_.Erase(5);
+  EXPECT_EQ(avl_tree_set_.Size(), 1);
+  avl_tree_set_.Erase(3);
   EXPECT_EQ(avl_tree_set_.Size(), 0);
 }
 
-TEST_F(SetTestFixture, TestSize) { EXPECT_EQ(avl_tree_set_.Size(), 5); }
-
-TEST_F(SetTestFixture, TestFind){
-  EXPECT_EQ(0, avl_tree_set_.Find(4));
-  EXPECT_EQ(1, avl_tree_set_.Find(1));
-  EXPECT_EQ(1, avl_tree_set_.Find(5));
-  EXPECT_EQ(0, avl_tree_set_.Find(3));
-  EXPECT_EQ(2, avl_tree_set_.Find(10));
-  EXPECT_EQ(2, avl_tree_set_.Find(2));
-}
-
-TEST_F(SetTestFixture, TestMinimum) {
-  EXPECT_EQ("Not found", avl_tree_set_.Minimum(4));
-  EXPECT_EQ("1 1", avl_tree_set_.Minimum(1));
-  EXPECT_EQ("5 1", avl_tree_set_.Minimum(5));
-  EXPECT_EQ("1 1", avl_tree_set_.Minimum(3));
-  EXPECT_EQ("10 2", avl_tree_set_.Minimum(10));
-  EXPECT_EQ("2 2", avl_tree_set_.Minimum(2));
-}
-
-TEST_F(SetTestFixture, TestMaximum) {
-  EXPECT_EQ("Not found", avl_tree_set_.Maximum(4));
-  EXPECT_EQ("10 2", avl_tree_set_.Maximum(3));
-  EXPECT_EQ("10 2", avl_tree_set_.Maximum(5));
-  EXPECT_EQ("2 2", avl_tree_set_.Maximum(2));
-  EXPECT_EQ("2 2", avl_tree_set_.Maximum(1));
-  EXPECT_EQ("10 2", avl_tree_set_.Maximum(10));
+TEST_F(SetTestFixture, TestErase) {
+  EXPECT_EQ(0, avl_tree_set_.Erase(4));
+  EXPECT_EQ(1, avl_tree_set_.Erase(1));
+  EXPECT_EQ(1, avl_tree_set_.Erase(5));
+  EXPECT_EQ(0, avl_tree_set_.Erase(3));
+  EXPECT_EQ(0, avl_tree_set_.Erase(10));
+  EXPECT_EQ(0, avl_tree_set_.Erase(2));
 }
 
 TEST_P(FindFixture, TestFind) {

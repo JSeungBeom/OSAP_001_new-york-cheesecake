@@ -105,13 +105,10 @@ public:
   // 노드 x가 루트인 부분트리에서 최소 key를 갖는 노드의 key와 depth를 공백으로
   // 구분하여 리턴
   std::string Minimum(T x) {
-    AVLTreeNode *node = FindNode(x);
+    AVLTreeNode *node = MinimumNode(x);
 
     if (node == nullptr)
       return "Not found";
-
-    while (node->get_left() != nullptr)
-      node = node->get_left();
 
     return std::to_string(node->get_key()) + " " +
            std::to_string(Find(node->get_key()));
@@ -144,8 +141,9 @@ public:
   };
 
   int Erase(T x) {
-    //
-    return -2;
+    int depth = Find(x);
+    root_ = EraseUtil(x, root_);
+    return depth;
   };
 
 private:
@@ -346,6 +344,64 @@ private:
       rank += left->get_size();
 
     return rank;
+  }
+
+  // key가 x인 노드가 루트인 부분트리에서 최소값을 갖는 노드를 반환하는 함수
+  AVLTreeNode *MinimumNode(T x) {
+    AVLTreeNode *node = FindNode(x);
+
+    if (node == nullptr)
+      return nullptr;
+
+    while (node->get_left() != nullptr)
+      node = node->get_left();
+
+    return node;
+  }
+
+  // 재귀적으로 삭제를 실행하는 함수
+  AVLTreeNode *EraseUtil(int x, AVLTreeNode *node) {
+    if (node == nullptr)
+      return node;
+
+    if (x > node->get_key())
+      node->set_right(EraseUtil(x, node->get_right()));
+    else if (x < node->get_key())
+      node->set_left(EraseUtil(x, node->get_left()));
+    // node의 key가 x인 경우
+    else {
+      AVLTreeNode *left = node->get_left();
+      AVLTreeNode *right = node->get_right();
+      // 자식이 한 개 이하인 경우
+      if (left == nullptr || right == nullptr) {
+        AVLTreeNode *target_node = nullptr;
+        // 자식이 없는 경우
+        if (left == nullptr && right == nullptr) {
+          target_node = node;
+          delete target_node;
+          return nullptr;
+        }
+        // 자식이 한 개인 경우
+        else {
+          target_node = node;
+          node = left ? left : right;
+          target_node->set_left(nullptr);
+          target_node->set_right(nullptr);
+          delete target_node;
+        }
+      }
+      // 자식이 두 개 다 있는 경우
+      else {
+        AVLTreeNode *successor = MinimumNode(right->get_key());
+        node->set_key(successor->get_key());
+        node->set_right(EraseUtil(successor->get_key(), node->get_right()));
+      }
+    }
+
+    UpdateHeight(node);
+    UpdateSize(node);
+
+    return Balance(node);
   }
 
   AVLTreeNode *root_;
