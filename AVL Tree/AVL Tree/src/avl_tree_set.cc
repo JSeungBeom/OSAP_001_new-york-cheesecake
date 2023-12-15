@@ -245,10 +245,10 @@ private:
       return node;
 
     if (balance_factor > 0) {
-      if (CalculateBalanceFactor(node->get_left()) > 0) {
+      if (CalculateBalanceFactor(node->get_left()) < 0) {
+        node->set_left(LeftRotate(node->get_left()));
         return RightRotate(node);
       } else {
-        node->set_left(LeftRotate(node->get_left()));
         return RightRotate(node);
       }
     } else {
